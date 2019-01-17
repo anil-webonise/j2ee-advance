@@ -19,7 +19,7 @@ public class ReflectionTest {
         System.out.println(" now our Class Name: " + concreteClass.getCanonicalName());
         // output --> now our Class Name: com.webonise.reflection.ConcreteClass
 
-        System.out.println("**************************************************************");
+        System.out.println("********************Primitive Type******************************************");
 
         // primitive types
         Class<?> booleanClass = boolean.class;
