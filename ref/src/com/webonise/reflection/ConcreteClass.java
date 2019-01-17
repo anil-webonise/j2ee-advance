@@ -1,7 +1,5 @@
 package com.webonise.reflection;
 
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
 @Deprecated
 public class ConcreteClass extends BaseClass implements BaseInterface {
     public int publicInt;
@@ -12,8 +10,6 @@ public class ConcreteClass extends BaseClass implements BaseInterface {
     public ConcreteClass(int i) {
         this.publicInt = i;
     }
-
-
 
     @Override
     public void method1() {
