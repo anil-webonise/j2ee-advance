@@ -301,7 +301,34 @@ public class ReflectionTest {
         } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
-        // System.out.println("*************************Get Public Constructor********************************");
+        System.out.println("*************************Get Public Constructor********************************");
+        /**
+         * We can use getConstructor() method on the class representation of object to get specific public constructor.
+         * Below example shows how to get the constructor of ConcreteClass defined above and the no-argument constructor of HashMap.
+         * It also shows how to get the array of parameter types for the constructor.
+         */
+        try {
+            Constructor<?> constructor = Class.forName("com.webonise.reflection.ConcreteClass").getConstructor(int.class);
+            //getting constructor parameter
+            System.out.println(Arrays.toString(constructor.getParameterTypes())); // [int]
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("*************************Instantiate Object using Constructor********************************");
+        /**
+         * We can use newInstance() method on the constructor object to instantiate a new instance of the class.
+         * Since we use reflection when we don’t have the classes information at compile time,
+         * we can assign it to Object and then further use reflection to access it’s fields and invoke it’s methods.
+         */
+        try {
+            Constructor<?> constructor = Class.forName("com.webonise.reflection.ConcreteClass").getConstructor(int.class);
+            Object obj = constructor.newInstance(10);
+            Method method = obj.getClass().getMethod("method1", null);
+            method.invoke(obj, null); // o/p -> method1 Impl
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 }
