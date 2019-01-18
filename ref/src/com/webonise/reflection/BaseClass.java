@@ -3,7 +3,7 @@ package com.webonise.reflection;
 public class BaseClass {
     public int baseInt;
 
-    public static void method2() {
+    public static void method3() {
         System.out.println("method3()");
 
     }

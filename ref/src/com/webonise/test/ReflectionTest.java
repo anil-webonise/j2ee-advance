@@ -5,6 +5,8 @@ import com.webonise.reflection.ConcreteClass;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ReflectionTest {
 
@@ -219,5 +221,87 @@ public class ReflectionTest {
         } catch (NoSuchFieldException nsfe) {
             nsfe.printStackTrace();
         }
+        System.out.println("*************************Get/Set Public Field Value ********************************");
+        /**
+         * Here we using get and set for accessing and modifying property
+         * We can get and set the value of a field in an Object using reflection.
+         * get() method return Object, so if field is primitive type, it returns the
+         * corresponsing Wrapper Class. If the field is static, we can pass Object as null in get() method.
+         * There are several set*() methods to set Object to the field or set different types of primitive types to the field.
+         * We can get the type of field and then invoke correct function to set the field value correctly.
+         * If the field is final, the set() methods throw java.lang.IllegalAccessException.
+         */
+        try {
+            Field field = Class.forName("com.webonise.reflection.ConcreteClass").getField("publicInt");
+            ConcreteClass concreteClass1 = new ConcreteClass(10);
+            // print filed value
+            System.out.println(field.get(concreteClass1));// output -> 10
+            // changing the class level non static instance var value
+            field.set(concreteClass1, 20);
+            // print filed value after change
+            System.out.println(field.get(concreteClass1)); // output ->20
+        } catch (ClassNotFoundException | IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException nsfe) {
+            nsfe.printStackTrace();
+        }
+        System.out.println("*************************Get/Set Private Field Value ********************************");
+        try {
+            Field privateField = Class.forName("com.webonise.reflection.ConcreteClass").getDeclaredField("privateString");
+            //turning off access check with below method call
+            privateField.setAccessible(true);
+            ConcreteClass concreteClass2 = new ConcreteClass(10);
+            // print private filed
+            System.out.println(privateField.get(concreteClass2));// output is -> Private String
+            // set private filed data
+            privateField.set(concreteClass2, "Private String  Modified ");
+            // print private filed after changes
+            System.out.println(privateField.get(concreteClass2));// output is -> Private String modified
+
+        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        System.out.println("************************* Get Public Method  ********************************");
+        /**
+         * We can use getMethod() to get a public method of class,
+         * we need to pass the method name and parameter types of the method.
+         * If the method is not found in the class, reflection API looks for the method in superclass.
+         */
+        try {
+            Method method = Class.forName("java.util.HashMap").getMethod("put", Object.class, Object.class);
+            System.out.println(Arrays.toString(method.getParameterTypes())); // op -> [class java.lang.Object, class java.lang.Object]
+            // get method return type
+            System.out.println(method.getReturnType()); // o/p ->class java.lang.Object
+            // get public modifier
+            System.out.println(Modifier.toString(method.getModifiers())); // o/p -> public
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        System.out.println("*************************Invoking Public Method ********************************");
+        try {
+            Method method = Class.forName("java.util.HashMap").getMethod("put", Object.class, Object.class);
+            Map<String, String> map = new HashMap();
+            method.invoke(map, "anil", "webonise"); // if method static then pass null as first args
+            System.out.println(map); // o/p -> {anil=webonise}
+        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        System.out.println("*************************Invoking Private Methods********************************");
+        /**
+         * We can use getDeclaredMethod() to get the private method and then turn off the access check to invoke it,
+         * below example shows how we can invoke method3() of BaseClass that is static and have no parameters.
+         */
+        // invoking method
+        try {
+            Method method = Class.forName("com.webonise.reflection.BaseClass").getDeclaredMethod("method3", null);
+            // set visiblity true
+            method.setAccessible(true);
+            method.invoke(null, null);// yeah we successfully invoked here o/p is -> method3()
+
+        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        // System.out.println("*************************Get Public Constructor********************************");
+
     }
 }
